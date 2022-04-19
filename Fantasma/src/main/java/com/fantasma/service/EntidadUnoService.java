@@ -5,14 +5,18 @@ import com.fantasma.exceptions.FantasmaRequestException;
 import com.fantasma.mapper.EntidadUnoMapper;
 import com.fantasma.repository.EntidadUnoRepository;
 import com.fantasma.repository.models.EntidadUnoModel;
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 public class EntidadUnoService {
 
+    private static final int PAGE_SIZE = 10;
     private final EntidadUnoRepository entidadUnoRepository;
 
     public EntidadUnoService(EntidadUnoRepository entidadUnoRepository){
@@ -39,14 +43,15 @@ public class EntidadUnoService {
     }
 
     @Transactional
-    public List<EntidadUno> getAll() {
-        List<EntidadUnoModel> entidadUnoModels = entidadUnoRepository.findAll();
-        return entidadUnoModels.stream().map(EntidadUnoMapper::mapModelToDomain)
-                .collect(Collectors.toList());
+    public Page<EntidadUno> getAll(Integer page) {
+        Pageable pageable = PageRequest.of(page, PAGE_SIZE);
+        var paginatedMembers = entidadUnoRepository.findAll(pageable);
+        var members = paginatedMembers.getContent().stream().map(EntidadUnoMapper::mapModelToDomain).collect(Collectors.toList());
+        return new PageImpl<>(members, pageable, paginatedMembers.getTotalElements());
     }
 
     @Transactional
-    public void delete (Long id) throws FantasmaRequestException {
+    public void deleteEntidad(Long id) throws FantasmaRequestException {
         Optional<EntidadUnoModel> entidadUnoModelOptional = entidadUnoRepository.findById(id);
         if(entidadUnoModelOptional.isEmpty()){
             throw new FantasmaRequestException("Entidad not found", "not.found", HttpStatus.NOT_FOUND);
