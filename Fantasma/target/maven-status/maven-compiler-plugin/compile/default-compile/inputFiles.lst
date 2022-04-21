@@ -1,7 +1,9 @@
 C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\domain\EntidadUno.java
 C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\dtos\EntidadUnoDTOUpdate.java
 C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\security\SecurityConfig.java
+C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\controller\SwaggerController.java
 C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\security\JwtProvider.java
+C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\config\SwaggerConfig.java
 C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\repository\models\EntidadUnoModel.java
 C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\security\MainUser.java
 C:\Users\54115\Desktop\fantasma\Fantasma\src\main\java\com\fantasma\controller\UserController.java
