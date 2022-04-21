@@ -3,10 +3,12 @@ package com.fantasma.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -50,6 +52,26 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    private static final String[] AUTH_WHITELIST = {
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**",
+            "/api/docs",
+            "/auth/**"
+    };
+
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring().antMatchers(AUTH_WHITELIST);
+    }
+
+    private static final String[] ADMIN_LIST = {"/entidades","/entidades/**"};
+
+    private static final String[] USER_LIST = {"/entidades"};
+
+    private static final String[] PERMIT_ALL = {"/auth/login","/auth/register","/swagger-ui/**","/api/docs","/swagger-ui.html"};
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.sessionManagement()
@@ -57,11 +79,14 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers(PERMIT_ALL).permitAll()
                 .and()
                 .addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/entidades/**").hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,USER_LIST).hasAnyAuthority("USER","ADMIN")
+                .antMatchers(HttpMethod.POST,ADMIN_LIST).hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE,ADMIN_LIST).hasAnyAuthority("ADMIN")
+                .antMatchers(HttpMethod.PUT,ADMIN_LIST).hasAnyAuthority("ADMIN")
                 .anyRequest().authenticated();
     }
 

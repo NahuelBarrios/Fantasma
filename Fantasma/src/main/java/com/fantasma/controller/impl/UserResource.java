@@ -8,8 +8,10 @@ import com.fantasma.dtos.UserLoginDTO;
 import com.fantasma.exceptions.FantasmaRequestException;
 import com.fantasma.mapper.UserMapper;
 import com.fantasma.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RestController;
 
+@Api(value = "UserResource", tags = {"Users"})
 @RestController
 public class UserResource implements UserController {
 

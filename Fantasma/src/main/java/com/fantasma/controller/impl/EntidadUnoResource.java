@@ -10,8 +10,10 @@ import com.fantasma.exceptions.FantasmaRequestException;
 import com.fantasma.mapper.EntidadUnoMapper;
 import com.fantasma.service.EntidadUnoService;
 import com.fantasma.util.ContextUtils;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.RestController;
 
+@Api(value = "EntidadUnoResource", tags = {"Entidades"})
 @RestController
 public class EntidadUnoResource implements EntidadUnoController {
 
